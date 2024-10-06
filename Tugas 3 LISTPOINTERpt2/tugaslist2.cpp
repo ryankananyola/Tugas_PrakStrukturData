@@ -35,21 +35,16 @@ int listkosong();
 
 int main()
 {
-
     buatListBaru();
-    int pilihmenu, i = 0, jumlahdata = 0;
+    int pilihmenu, jumlahdata = 0;
     string kembali = "y";
     char nama[30];
     Buah databuah;
 
     while (kembali == "y")
     {
-
-        menu:
-
-        system("cls");
+        system("cls");  // Clear screen
         judul();
-
         cout << "== MENU UTAMA ==" << endl;
         cout << " 1. Input Data buah " << endl;
         cout << " 2. Lihat Data buah " << endl;
@@ -75,9 +70,17 @@ int main()
                 cout << " Masukkan Nama Buah  : ";
                 cin.getline(databuah.namabuah, 30);
                 cout << " Masukkan Harga Buah : ";
-                cin >> databuah.hargabuah;
+                cin >> databuah.hargabuah; 
                 cout << endl;
-                sisipList(databuah);
+                if (databuah.hargabuah <= 0)
+                {
+                    cout << "Harga tidak boleh 0 atau kurang!" << endl;
+                    i--; 
+                }
+                else
+                {
+                    sisipList(databuah);  
+                }
             }
 
             cout << " Data telah tersimpan !!!" << endl;
@@ -85,7 +88,6 @@ int main()
             cin >> kembali;
             cout << endl;
         }
-
         else if (pilihmenu == 2)
         {
             system("cls");
@@ -94,13 +96,19 @@ int main()
             cout << " 2. Menu Lihat Data Buah " << endl;
             cout << "--------------------------" << endl;
 
-            cetakList();
+            if (listkosong())
+            {
+                cout << " Tidak ada data yang tersimpan." << endl;
+            }
+            else
+            {
+                cetakList();
+            }
 
             cout << " Kembali ke menu utama ? (y/n) : ";
             cin >> kembali;
             cout << endl;
         }
-
         else if (pilihmenu == 3)
         {
             system("cls");
@@ -108,11 +116,17 @@ int main()
 
             cout << " 3. Menu Hapus Data Buah " << endl;
             cout << "--------------------------" << endl;
-            cout << " Masukkan nama buah yang ingin dihapus : ";
-            cin.ignore();
-            cin.getline(nama, 30);
-
-            hapusList(nama);
+            if (listkosong())
+            {
+                cout << " Data tidak ada untuk dihapus." << endl;
+            }
+            else
+            {
+                cout << " Masukkan nama buah yang ingin dihapus : ";
+                cin.ignore();
+                cin.getline(nama, 30);
+                hapusList(nama);
+            }
 
             cout << " Kembali ke menu utama ? (y/n) : ";
             cin >> kembali;
@@ -127,18 +141,13 @@ void buatListBaru()
     ekor = (Node*) malloc(sizeof(Node));
     kepala->info.hargabuah = -1;
     kepala->next = ekor;
-    ekor->info.hargabuah = 9999;
+    ekor->info.hargabuah = INT_MAX;
     ekor->next = NULL;
 }
 
 int listkosong()
 {
-    if (kepala->next == ekor){
-        return (true);
-    }
-    else{
-        return (false);
-    }
+    return (kepala->next == ekor);
 }
 
 void sisipList(Buah infoBaru)
@@ -179,13 +188,14 @@ void hapusList(string target)
     else
     {
         Node *bantu = kepala;
-        while (bantu->next->next != ekor && bantu->next->info.namabuah != target)
+        while (bantu->next != ekor && strcmp(bantu->next->info.namabuah, target.c_str()) != 0)
         {
             bantu = bantu->next;
         }
-        if (bantu->next->info.namabuah != target)
+
+        if (bantu->next == ekor)
         {
-            cout << " Data tidak ditemukan! " << endl;
+            cout << " Data tidak ditemukan!" << endl;
         }
         else
         {
