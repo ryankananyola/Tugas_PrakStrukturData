@@ -133,7 +133,7 @@ void buatListBaru()
     ekor = new Node;
     kepala->info.hargaBuah = -9999;
     kepala->next = ekor;
-    ekor->info.hargaBuah = 9999;
+    ekor->info.hargaBuah = INT_MAX;
     ekor->next = NULL;
     awal = NULL;
     akhir = NULL;
